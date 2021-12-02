@@ -24,7 +24,7 @@ def pre_process(data):
 def entropy(S):
     total = sum(S)
     #to avoid a possible divide by zero error
-    if total is 0:
+    if total == 0:
         total = 1
     entropy = 0
     for i in S:
@@ -225,7 +225,7 @@ if __name__ == '__main__':
             print('please enter an integer[1, 100] for percents')
             sys.exit(0)
     except:
-        if len(sys.argv) is 5 and train_percent > 0 or train_percent <= 100:
+        if len(sys.argv) == 5 and train_percent > 0 or train_percent <= 100:
             validate_percent = None
         else:
             print('arguments error')
@@ -261,7 +261,15 @@ if __name__ == '__main__':
     elif model.lower() == 'maxdepth':
         v_split_point = int(np.floor((validate_percent * train_data.shape[0]) / 100))
         validate_set = pre_process(train_data.tail(v_split_point).reset_index(drop=True))
-        max_depth = int(sys.argv[6])
+        
+        try:
+            max_depth = int(sys.argv[6])
+            if max_depth < 1:
+                raise Exception
+        except:
+            print('Please enter a positive integer max depth as the last argument (e.g. trainfile testfile 90 10 5')
+            sys.exit(0)
+
         base_acc = -1
         best_tree = None
         best_depth = -1
